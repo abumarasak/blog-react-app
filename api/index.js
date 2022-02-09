@@ -39,7 +39,12 @@ app.use("/api/users/", usersRoute);
 app.use("/api/posts/", postRoute);
 app.use("/api/categories/", categoryRoute);
 
-const port = 5000;
-app.listen(port, () => {
-  console.log(`app is listing in port ${port}`);
+app.use(express.static(path.join(__dirname, "/client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+});
+
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`app is listing in port ${process.env.PORT || 5000}`);
 });

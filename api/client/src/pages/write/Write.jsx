@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import "./write.css";
 import { Context } from "../../context/Context";
-import axios from "axios";
+import { axiosInstance } from "../../config";
 import { useNavigate } from "react-router-dom";
 export default function Write() {
   const [title, setTitle] = useState("");
@@ -23,11 +23,11 @@ export default function Write() {
       data.append("file", file);
       newPost.photo = filename;
       try {
-        await axios.post("/upload", data);
+        await axiosInstance.post("/upload", data);
       } catch (err) {}
     }
     try {
-      const res = await axios.post("/posts", newPost);
+      const res = await axiosInstance.post("/posts", newPost);
       navigate("/post/" + res.data._id);
     } catch (err) {}
   };
