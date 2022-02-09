@@ -1,23 +1,24 @@
-import { axiosInstance } from "../../config";
+// import { axiosInstance } from "../../config";
 
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./singlePost.css";
+import axios from "axios";
 
 export default function SinglePost() {
   const navigate = useNavigate();
   const path = useLocation().pathname.split("/")[2];
   const [singlePost, setSinglePost] = useState("");
-  const PF = "https://khaledmarasablog.herokuapp.com/images";
+  const PF = "http://localhost:5000/images/";
   const { user } = useContext(Context);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
   useEffect(() => {
     const getPost = async () => {
-      const res = await axiosInstance.get(`/posts/${path}`);
+      const res = await axios.get(`/posts/${path}`);
       setSinglePost(res.data);
       setTitle(res.data.title);
       setDesc(res.data.desc);
@@ -26,7 +27,7 @@ export default function SinglePost() {
   }, [path]);
   const handleDelete = async () => {
     try {
-      await axiosInstance.delete(`/posts/${singlePost._id}`, {
+      await axios.delete(`/posts/${singlePost._id}`, {
         data: { username: user.username },
       });
       navigate("/");
@@ -34,7 +35,7 @@ export default function SinglePost() {
   };
   const handleUpdate = async () => {
     try {
-      await axiosInstance.put(`/posts/${singlePost._id}`, {
+      await axios.put(`/posts/${singlePost._id}`, {
         username: user.username,
         title,
         desc,
